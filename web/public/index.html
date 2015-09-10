@@ -5,21 +5,22 @@
 </head>
 <body>
   Enter a URL here:
-  <form id="post">
-    <input id="urlInput" type="input" name="url"></input>
+  <form id="urlForm" action="/" method="POST">
+    <input id="urlInput" type="input" name="url">
+    <input type="submit">
   </form>
   <script>
-    document.getElementById('post').addEventListener(
-      'submit', function(e) {
-        e.preventDefault();
-        var request = new XMLHttpRequest();
-        var data = document.getElementById('urlInput').value;
-        request.open("POST", data, true);
-        request.setRequestHeader("Content-type", "text/html");
-        request.send("url=" + document.getElementById('urlInput').value)
+    // document.getElementById('urlForm').addEventListener(
+    //   'submit', function(e) {
+    //     e.preventDefault();
+    //     var request = new XMLHttpRequest();
+    //     var data = document.getElementById('urlInput').value;
+    //     request.open("POST", data, true);
+    //     request.setRequestHeader("Content-type", "text/plain");
+    //     request.send("url=" + document.getElementById('urlInput').value)
 
-        document.getElementById('post').reset();
-      });
+    //     document.getElementById('urlForm').reset();
+    //   });
     </script>
    <!--<script>
     var sendIt = function(e) {
@@ -27,7 +28,7 @@
       e.preventDefault();
 
     };
-    document.getElementById('post').addEventListener(
+    document.getElementById('urlForm').addEventListener(
       'submit', sendIt);
   </script>-->
 </body>

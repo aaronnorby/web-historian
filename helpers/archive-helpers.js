@@ -53,20 +53,20 @@ exports.addUrlToList = function(url) {
   urlVar = url + '';
   urlVar = urlVar.trim().split('=')[1];
 
-  fs.appendFile(path.join(__dirname, '../', 'archives/', 'sites.txt'), urlVar + '\n', function(err) {
+  fs.appendFile(path.join(__dirname, '..', 'archives', 'sites.txt'), urlVar + '\n', function(err) {
     if (err) throw err;
     console.log('The ' + urlVar + ' was appended to file!')
   })
 };
 
 exports.isUrlArchived = function(url) {
-  return fs.stat(fs.path.join(__dirname, '../', 'archives/', 'sites/') + url + '.html', function(err, stat) {
-    return stat.isFile();
-  }
+  // return fs.stat(fs.path.join(__dirname, '../', 'archives/', 'sites/') + url + '.html', function(err, stat) {
+  //   return stat.isFile();
+  // }
 };
 
 exports.downloadUrls = function() {
-  var child = spawn('node', ['workers/htmlfetcher.js']);
+  var child = spawn('node', [path.join(__dirname, '..', 'workers', 'htmlfetcher.js')]);
   child.stdout.on('data', function(data) {
     console.log(data + '');
   });
