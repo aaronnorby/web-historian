@@ -5,8 +5,30 @@
 </head>
 <body>
   Enter a URL here:
-  <form method="POST">
-    <input type="input" name="url"></input>
+  <form id="post">
+    <input id="urlInput" type="input" name="url"></input>
   </form>
+  <script>
+    document.getElementById('post').addEventListener(
+      'submit', function(e) {
+        e.preventDefault();
+        var request = new XMLHttpRequest();
+        var data = document.getElementById('urlInput').value;
+        request.open("POST", data, true);
+        request.setRequestHeader("Content-type", "text/html");
+        request.send("url=" + document.getElementById('urlInput').value)
+
+        document.getElementById('post').reset();
+      });
+    </script>
+   <!--<script>
+    var sendIt = function(e) {
+      console.log('triggered');
+      e.preventDefault();
+
+    };
+    document.getElementById('post').addEventListener(
+      'submit', sendIt);
+  </script>-->
 </body>
 </html>

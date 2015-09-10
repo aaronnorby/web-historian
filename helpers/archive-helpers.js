@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var spawn = require('child_process').spawn;
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -31,11 +32,25 @@ exports.readListOfUrls = function() {
 exports.isUrlInList = function() {
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(url) {
+  urlVar = url + '';
+  urlVar = urlVar.split('=')[1];
+
+  fs.appendFile(path.join(__dirname, '../', 'archives/', 'sites.txt'), urlVar + '\n', function(err) {
+    if (err) throw err;
+    console.log('The ' + urlVar + ' was appended to file!')
+  })
 };
 
 exports.isUrlArchived = function() {
 };
 
 exports.downloadUrls = function() {
+  var child = spawn('node', ['workers/htmlfetcher.js']);
+  child.stdout.on('data', function(data) {
+    console.log(data + '');
+  });
+  child.stderr.on('data', function(err){
+    console.log('child err: ' + err);
+  });
 };
