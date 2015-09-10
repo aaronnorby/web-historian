@@ -10,7 +10,7 @@ var spawn = require('child_process').spawn;
  * customize it in any way you wish.
  */
 
-exports.paths = {
+exports.paths = paths = {
   siteAssets: path.join(__dirname, '../web/public'),
   archivedSites: path.join(__dirname, '../archives/sites'),
   list: path.join(__dirname, '../archives/sites.txt')
@@ -26,15 +26,32 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function() {
+
+exports.readListOfUrls = readListOfUrls = function(cb) {
+  fs.readFile(paths.list, function(err, data){
+    if (err) throw err;
+    var sites = (data+'').split('\n');
+    for (var i = 0; i < sites.length; i++) {
+      if (sites[i].length !== 0) {
+        cb(sites[i])
+      }
+    }
+  });
 };
 
-exports.isUrlInList = function() {
+exports.isUrlInList = function(url) {
+  var contains = false;
+  readListOfUrls(function(listUrl) {
+    if (listUrl === url) {
+      contains = true;
+    }
+  });
+  return contains;
 };
 
 exports.addUrlToList = function(url) {
   urlVar = url + '';
-  urlVar = urlVar.split('=')[1];
+  urlVar = urlVar.trim().split('=')[1];
 
   fs.appendFile(path.join(__dirname, '../', 'archives/', 'sites.txt'), urlVar + '\n', function(err) {
     if (err) throw err;
@@ -42,7 +59,10 @@ exports.addUrlToList = function(url) {
   })
 };
 
-exports.isUrlArchived = function() {
+exports.isUrlArchived = function(url) {
+  return fs.stat(fs.path.join(__dirname, '../', 'archives/', 'sites/') + url + '.html', function(err, stat) {
+    return stat.isFile();
+  }
 };
 
 exports.downloadUrls = function() {

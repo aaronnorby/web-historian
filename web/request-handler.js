@@ -13,14 +13,15 @@ exports.handleRequest = function (req, res) {
     httpHelper.serveAssets(res, path.join(__dirname, './', 'public/', 'styles.css'), httpHelper.sendResponse);
   } else if (req.method === 'POST') {
     req.addListener('data', function(data){
-      // console.log(data);
+      if (archive.isUrlInList(data + '') && (archive.isUrlArchived(data + '')) {
+        httpHelper.serveAssets(res, path.join(__dirname, '../', 'archives/', 'sites/' + data + '.html'))
+      }
       archive.addUrlToList(data);
+    }); 
+
+    httpHelper.serveAssets(res, path.join(__dirname, './', 'public/', 'loading.html'), function(res,data) {
+      httpHelper.sendResponse(res, data, 302)
     });
-    
-
-    // req.on()  
-
-    httpHelper.serveAssets(res, path.join(__dirname, './', 'public/', 'loading.html'), httpHelper.sendResponse);
     archive.downloadUrls();
   }
 };
