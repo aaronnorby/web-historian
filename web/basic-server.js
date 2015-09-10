@@ -1,6 +1,8 @@
 var http = require("http");
 var handler = require("./request-handler");
 var initialize = require("./initialize.js");
+var archive = require('../helpers/archive-helpers.js')
+var CronJob = require('cron').CronJob;
 
 // Why do you think we have this here?
 // HINT: It has to do with what's in .gitignore
@@ -16,3 +18,10 @@ if (module.parent) {
   server.listen(port, ip);
   console.log("Listening on http://" + ip + ":" + port);
 }
+
+var job = new CronJob('59 * * * * *', function() {
+  archive.downloadUrls();
+  console.log("cron ran: " + new Date());
+});
+
+job.start();

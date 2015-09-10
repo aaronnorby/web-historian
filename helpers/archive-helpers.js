@@ -39,19 +39,26 @@ exports.readListOfUrls = readListOfUrls = function(cb) {
   });
 };
 
-exports.isUrlInList = function(url) {
+exports.isUrlInList = function(url, cb) {
   var contains = false;
-  readListOfUrls(function(listUrl) {
-    if (listUrl === url) {
-      contains = true;
+  fs.readFile(paths.list, function(err, data){
+    if (err) throw err;
+    var sites = (data+'').split('\n');
+    for (var i = 0; i < sites.length; i++) {
+      if (sites[i].length !== 0) {
+        if (sites[i] === url) {
+          contains = true;
+        }
+      }
     }
+    cb(contains);
   });
-  return contains;
-};
+}
+
+
 
 exports.addUrlToList = function(url) {
-  urlVar = url + '';
-  urlVar = urlVar.trim().split('=')[1];
+  urlVar = url;
 
   fs.appendFile(path.join(__dirname, '..', 'archives', 'sites.txt'), urlVar + '\n', function(err) {
     if (err) throw err;
@@ -59,10 +66,15 @@ exports.addUrlToList = function(url) {
   })
 };
 
-exports.isUrlArchived = function(url) {
-  // return fs.stat(fs.path.join(__dirname, '../', 'archives/', 'sites/') + url + '.html', function(err, stat) {
-  //   return stat.isFile();
-  // }
+exports.isUrlArchived = function(url, cb) {
+  console.log("urlarch: " + url)
+  return fs.stat(path.join(__dirname, '../', 'archives/', 'sites/') + url + '.html', function(err, stat) {
+    if (err) {
+      cb(false);
+    } else {
+      cb(true);
+    }
+  });
 };
 
 exports.downloadUrls = function() {
